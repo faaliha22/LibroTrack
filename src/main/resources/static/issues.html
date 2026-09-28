@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibroTrack — Issue Records</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        .app {
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            color: white;
+            position: fixed;
+            inset: 0 auto 0 0;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px;
+            margin-bottom: 42px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: white;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-text h1 {
+            font-size: 19px;
+            line-height: 1.1;
+        }
+
+        .brand-text span {
+            display: block;
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .nav-title {
+            color: #6b7280;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            font-weight: 700;
+            padding: 0 12px;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-item {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            transition: 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-item.active {
+            background: white;
+            color: #111827;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #263244;
+            padding: 18px 10px 4px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 32px 38px 45px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-heading h2 {
+            font-size: 29px;
+            letter-spacing: -0.8px;
+            color: #111827;
+        }
+
+        .page-heading p {
+            margin-top: 7px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            background: white;
+            padding: 8px 13px 8px 8px;
+            border: 1px solid #e7eaf0;
+            border-radius: 12px;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 9px;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-text strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .profile-text span {
+            display: block;
+            color: #9ca3af;
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        /* PANEL */
+        .panel {
+            background: white;
+            border: 1px solid #e8ebf1;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+            margin-bottom: 22px;
+        }
+
+        .panel h3 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .panel-subtitle {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-bottom: 22px;
+        }
+
+        /* FORM */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 16px;
+            align-items: end;
+        }
+
+        .form-group label {
+            display: block;
+            color: #374151;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d9dee7;
+            border-radius: 9px;
+            background: white;
+            color: #1f2937;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #9ca3af;
+            box-shadow: 0 0 0 3px rgba(156, 163, 175, 0.12);
+        }
+
+        /* DISABLED BOOK OPTION */
+        select option:disabled {
+            color: #9ca3af;
+            background: #f3f4f6;
+        }
+
+        .issue-button {
+            border: none;
+            background: #111827;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s ease;
+        }
+
+        .issue-button:hover {
+            background: #1f2937;
+        }
+
+        .message {
+            margin-top: 15px;
+            min-height: 18px;
+            font-size: 12px;
+            color: #b91c1c;
+        }
+
+        .success {
+            color: #166534;
+        }
+
+        /* TABLE HEADER */
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .record-count {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px 12px;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .returned {
+            color: #166534;
+            font-weight: 600;
+        }
+
+        .not-returned {
+            color: #b91c1c;
+            font-weight: 600;
+        }
+
+        .return-button {
+            border: none;
+            background: #111827;
+            color: white;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .return-button:hover {
+            background: #1f2937;
+        }
+
+        .return-button:disabled {
+            background: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #9ca3af;
+            padding: 35px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #a1a8b3;
+            font-size: 10px;
+            margin-top: 35px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+
+            .sidebar {
+                width: 215px;
+            }
+
+            .main {
+                margin-left: 215px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .issue-button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 760px) {
+
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+
+            .app {
+                display: block;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .nav-title,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .nav-item {
+                white-space: nowrap;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px 15px 35px;
+            }
+
+            .admin-profile {
+                display: none;
+            }
+
+            .topbar {
+                margin-bottom: 22px;
+            }
+
+            .page-heading h2 {
+                font-size: 23px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                L
+            </div>
+
+            <div class="brand-text">
+                <h1>LibroTrack</h1>
+                <span>Library Management</span>
+            </div>
+
+        </div>
+
+        <div class="nav-title">
+            Workspace
+        </div>
+
+        <nav class="nav">
+
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a href="books.html" class="nav-item">
+                <span class="nav-icon">▣</span>
+                Books
+            </a>
+
+            <a href="members.html" class="nav-item">
+                <span class="nav-icon">♙</span>
+                Members
+            </a>
+
+            <a href="issues.html" class="nav-item active">
+                <span class="nav-icon">↔</span>
+                Issue Records
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System operational
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="page-heading">
+
+                <h2>Issue Records</h2>
+
+                <p>
+                    Manage book issue and return activity.
+                </p>
+
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="avatar">
+                    LT
+                </div>
+
+                <div class="profile-text">
+                    <strong>Library Admin</strong>
+                    <span>LibroTrack System</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ISSUE BOOK -->
+        <section class="panel">
+
+            <h3>
+                Issue a Book
+            </h3>
+
+            <p class="panel-subtitle">
+                Select an available book, choose a member, and record the issue date.
+            </p>
+
+            <form id="issueForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label for="bookSelect">
+                            Book
+                        </label>
+
+                        <select id="bookSelect">
+
+                            <option value="">
+                                Select a book
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="memberSelect">
+                            Member
+                        </label>
+
+                        <select id="memberSelect">
+
+                            <option value="">
+                                Select a member
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="issueDate">
+                            Issue Date
+                        </label>
+
+                        <input
+                                type="date"
+                                id="issueDate"
+                        >
+
+                    </div>
+
+
+                    <button
+                            type="submit"
+                            class="issue-button"
+                    >
+                        Issue Book
+                    </button>
+
+                </div>
+
+                <div
+                        id="issueMessage"
+                        class="message"
+                ></div>
+
+            </form>
+
+        </section>
+
+
+        <!-- RECORDS -->
+        <section class="panel">
+
+            <div class="table-header">
+
+                <div>
+
+                    <h3>
+                        Library Issue Records
+                    </h3>
+
+                    <p class="panel-subtitle">
+                        Track currently issued and returned books.
+                    </p>
+
+                </div>
+
+                <span
+                        id="recordCount"
+                        class="record-count"
+                >
+                    0 Records
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Book</th>
+                        <th>Member</th>
+                        <th>Issue Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="issuesTableBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <footer class="footer">
+            LibroTrack · Library Book Issue & Return Manager
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    /* =========================================================
+       ERROR MESSAGE
+       ========================================================= */
+
+    async function getErrorMessage(response) {
+
+        try {
+
+            const data = await response.json();
+
+            if (data.message) {
+                return data.message;
+            }
+
+            return "Something went wrong. Please try again.";
+
+        } catch (error) {
+
+            return "Something went wrong. Please try again.";
+
+        }
+    }
+
+
+    /* =========================================================
+       ESCAPE HTML
+       ========================================================= */
+
+    function escapeHtml(value) {
+
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+
+    /* =========================================================
+       DEFAULT DATE
+       ========================================================= */
+
+    function setTodayAsDefault() {
+
+        const today =
+            new Date()
+                .toISOString()
+                .split('T')[0];
+
+        document.getElementById(
+            'issueDate'
+        ).value = today;
+
+        document.getElementById(
+            'issueDate'
+        ).max = today;
+    }
+
+
+    /* =========================================================
+       LOAD BOOKS
+
+       IMPORTANT:
+       - ALL books are displayed
+       - Available books can be selected
+       - 0 available books are displayed but disabled
+       ========================================================= */
+
+    async function loadBooksForIssue() {
+
+        const response =
+            await fetch('/books');
+
+        if (!response.ok) {
+            throw new Error('Failed to load books');
+        }
+
+        const books =
+            await response.json();
+
+        const select =
+            document.getElementById('bookSelect');
+
+        select.innerHTML = `
+            <option value="">
+                Select a book
+            </option>
+        `;
+
+
+        books.forEach(book => {
+
+            const option =
+                document.createElement('option');
+
+            option.value = book.id;
+
+
+            /*
+             * Copy-management values.
+             *
+             * Preferred:
+             *     book.availableCopies
+             *     book.totalCopies
+             *
+             * Fallback:
+             *     book.available
+             */
+
+            const availableCopies =
+                Number(
+                    book.availableCopies ??
+                    (book.available ? 1 : 0)
+                );
+
+            const totalCopies =
+                Number(
+                    book.totalCopies ?? 1
+                );
+
+
+            /*
+             * BOOK AVAILABLE
+             */
+
+            if (availableCopies > 0) {
+
+                option.textContent =
+                    `${book.title} — ${book.author} (${availableCopies}/${totalCopies} available)`;
+
+                option.disabled = false;
+
+            }
+
+
+            /*
+             * BOOK NOT AVAILABLE
+             */
+
+            else {
+
+                option.textContent =
+                    `${book.title} — ${book.author} (0/${totalCopies} available)`;
+
+                option.disabled = true;
+
+            }
+
+
+            select.appendChild(option);
+
+        });
+
+    }
+
+
+    /* =========================================================
+       LOAD MEMBERS
+       ========================================================= */
+
+    async function loadMembersForIssue() {
+
+        const response =
+            await fetch('/members');
+
+        if (!response.ok) {
+            throw new Error('Failed to load members');
+        }
+
+        const members =
+            await response.json();
+
+        const select =
+            document.getElementById('memberSelect');
+
+        select.innerHTML = `
+            <option value="">
+                Select a member
+            </option>
+        `;
+
+
+        members.forEach(member => {
+
+            const option =
+                document.createElement('option');
+
+            option.value = member.id;
+
+            option.textContent =
+                `${member.name} — ${member.email}`;
+
+            select.appendChild(option);
+
+        });
+
+    }
+
+
+    /* =========================================================
+       LOAD ISSUE RECORDS
+       ========================================================= */
+
+    async function loadIssueRecords() {
+
+        const response =
+            await fetch('/issues');
+
+        if (!response.ok) {
+            throw new Error('Failed to load issue records');
+        }
+
+        const issues =
+            await response.json();
+
+
+        document.getElementById(
+            'recordCount'
+        ).textContent =
+            `${issues.length} ${
+                issues.length === 1
+                    ? 'Record'
+                    : 'Records'
+            }`;
+
+
+        const tableBody =
+            document.getElementById(
+                'issuesTableBody'
+            );
+
+        tableBody.innerHTML = '';
+
+
+        if (issues.length === 0) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="7"
+                        class="empty-row"
+                    >
+                        No issue records have been created yet.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        issues.forEach(issue => {
+
+            const returned =
+                issue.returnDate !== null &&
+                issue.returnDate !== undefined;
+
+
+            const row =
+                document.createElement('tr');
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${escapeHtml(issue.id)}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                issue.book?.title || 'Unknown'
+            )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                issue.member?.name || 'Unknown'
+            )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                issue.issueDate || '-'
+            )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                issue.returnDate || '-'
+            )}
+                </td>
+
+                <td
+                    class="${
+                returned
+                    ? 'returned'
+                    : 'not-returned'
+            }"
+                >
+                    ${
+                returned
+                    ? 'Returned'
+                    : 'Issued'
+            }
+                </td>
+
+                <td>
+
+                    <button
+                        class="return-button"
+                        data-id="${escapeHtml(issue.id)}"
+                        ${returned ? 'disabled' : ''}
+                    >
+                        ${
+                returned
+                    ? 'Returned'
+                    : 'Return Book'
+            }
+                    </button>
+
+                </td>
+
+            `;
+
+
+            tableBody.appendChild(row);
+
+        });
+
+
+        document
+            .querySelectorAll(
+                '.return-button:not(:disabled)'
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    'click',
+                    () => returnBook(
+                        button.dataset.id
+                    )
+                );
+
+            });
+
+    }
+
+
+    /* =========================================================
+       REFRESH EVERYTHING
+       ========================================================= */
+
+    async function refreshIssuePage() {
+
+        await Promise.all([
+
+            loadBooksForIssue(),
+
+            loadMembersForIssue(),
+
+            loadIssueRecords()
+
+        ]);
+
+    }
+
+
+    /* =========================================================
+       ISSUE BOOK
+       ========================================================= */
+
+    document
+        .getElementById('issueForm')
+        .addEventListener(
+            'submit',
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const message =
+                    document.getElementById(
+                        'issueMessage'
+                    );
+
+                message.textContent = '';
+
+                message.classList.remove(
+                    'success'
+                );
+
+
+                const bookId =
+                    document.getElementById(
+                        'bookSelect'
+                    ).value;
+
+
+                const memberId =
+                    document.getElementById(
+                        'memberSelect'
+                    ).value;
+
+
+                const issueDate =
+                    document.getElementById(
+                        'issueDate'
+                    ).value;
+
+
+                /* BOOK VALIDATION */
+
+                if (!bookId) {
+
+                    message.textContent =
+                        'Please select a book.';
+
+                    return;
+                }
+
+
+                /* MEMBER VALIDATION */
+
+                if (!memberId) {
+
+                    message.textContent =
+                        'Please select a member.';
+
+                    return;
+                }
+
+
+                /* DATE VALIDATION */
+
+                if (!issueDate) {
+
+                    message.textContent =
+                        'Please select the issue date.';
+
+                    return;
+                }
+
+
+                const today =
+                    new Date()
+                        .toISOString()
+                        .split('T')[0];
+
+
+                if (issueDate > today) {
+
+                    message.textContent =
+                        'Issue date cannot be in the future.';
+
+                    return;
+                }
+
+
+                /* ISSUE RECORD */
+
+                const issueRecord = {
+
+                    book: {
+                        id: Number(bookId)
+                    },
+
+                    member: {
+                        id: Number(memberId)
+                    },
+
+                    issueDate: issueDate
+
+                };
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            '/issues',
+                            {
+                                method: 'POST',
+
+                                headers: {
+                                    'Content-Type':
+                                        'application/json'
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        issueRecord
+                                    )
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        message.textContent =
+                            await getErrorMessage(
+                                response
+                            );
+
+                        return;
+                    }
+
+
+                    /* RESET FORM */
+
+                    this.reset();
+
+                    setTodayAsDefault();
+
+
+                    /* SUCCESS MESSAGE */
+
+                    message.textContent =
+                        'Book issued successfully!';
+
+                    message.classList.add(
+                        'success'
+                    );
+
+
+                    /* REFRESH BOOK COPIES + RECORDS */
+
+                    await refreshIssuePage();
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    message.textContent =
+                        'Unable to connect to the server. Please try again.';
+
+                }
+
+            }
+        );
+
+
+    /* =========================================================
+       RETURN BOOK
+       ========================================================= */
+
+    async function returnBook(id) {
+
+        const message =
+            document.getElementById(
+                'issueMessage'
+            );
+
+        message.textContent = '';
+
+        message.classList.remove(
+            'success'
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/issues/${id}/return`,
+                    {
+                        method: 'PUT'
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                message.textContent =
+                    await getErrorMessage(
+                        response
+                    );
+
+                return;
+            }
+
+
+            message.textContent =
+                'Book returned successfully!';
+
+            message.classList.add(
+                'success'
+            );
+
+
+            /*
+             * Refresh book availability.
+             * Returned copy should become available again.
+             */
+
+            await refreshIssuePage();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                'Unable to connect to the server. Please try again.';
+
+        }
+
+    }
+
+
+    /* =========================================================
+       PAGE LOAD
+       ========================================================= */
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        async function() {
+
+            setTodayAsDefault();
+
+            try {
+
+                await refreshIssuePage();
+
+            } catch (error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    'issueMessage'
+                ).textContent =
+                    'Unable to load issue records. Please try again.';
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

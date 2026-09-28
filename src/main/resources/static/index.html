@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibroTrack — Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        .app {
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            color: white;
+            position: fixed;
+            inset: 0 auto 0 0;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px;
+            margin-bottom: 42px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: white;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-text h1 {
+            font-size: 19px;
+            line-height: 1.1;
+        }
+
+        .brand-text span {
+            display: block;
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .nav-title {
+            color: #6b7280;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            font-weight: 700;
+            padding: 0 12px;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-item {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            transition: 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-item.active {
+            background: white;
+            color: #111827;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #263244;
+            padding: 18px 10px 4px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 32px 38px 45px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-heading h2 {
+            font-size: 29px;
+            letter-spacing: -0.8px;
+            color: #111827;
+        }
+
+        .page-heading p {
+            margin-top: 7px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            background: white;
+            padding: 8px 13px 8px 8px;
+            border: 1px solid #e7eaf0;
+            border-radius: 12px;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 9px;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-text strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .profile-text span {
+            display: block;
+            color: #9ca3af;
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        /* HERO */
+        .welcome {
+            background: #111827;
+            color: white;
+            border-radius: 18px;
+            padding: 27px 29px;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .welcome h3 {
+            font-size: 20px;
+            letter-spacing: -0.3px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            color: #aeb8c8;
+            font-size: 12px;
+            max-width: 520px;
+            line-height: 1.6;
+        }
+
+        .welcome-badge {
+            border: 1px solid #374151;
+            background: #1f2937;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #d1d5db;
+            white-space: nowrap;
+        }
+
+        /* STATS */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 26px 0 14px;
+        }
+
+        .section-title h3 {
+            font-size: 16px;
+            color: #1f2937;
+        }
+
+        .section-title span {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e8ebf1;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 9px;
+        }
+
+        .stat-value {
+            font-size: 30px;
+            line-height: 1;
+            letter-spacing: -1px;
+            color: #111827;
+            font-weight: 750;
+        }
+
+        .stat-description {
+            margin-top: 8px;
+            color: #9ca3af;
+            font-size: 10px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* OVERVIEW */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 18px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e8ebf1;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.035);
+        }
+
+        .panel h3 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .panel-subtitle {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-bottom: 22px;
+        }
+
+        .availability-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .availability-label {
+            color: #4b5563;
+            font-size: 12px;
+        }
+
+        .availability-value {
+            color: #111827;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .progress {
+            height: 8px;
+            background: #eef0f3;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #111827;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        /* QUICK LINKS */
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quick-link {
+            text-decoration: none;
+            border: 1px solid #e7eaf0;
+            border-radius: 10px;
+            padding: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #374151;
+            transition: 0.2s ease;
+        }
+
+        .quick-link:hover {
+            border-color: #cbd5e1;
+            background: #fafbfc;
+            transform: translateX(2px);
+        }
+
+        .quick-link-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quick-icon {
+            width: 32px;
+            height: 32px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .quick-link strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .quick-link small {
+            display: block;
+            color: #9ca3af;
+            font-size: 9px;
+            margin-top: 3px;
+        }
+
+        .arrow {
+            color: #9ca3af;
+            font-size: 15px;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            color: #a1a8b3;
+            font-size: 10px;
+            margin-top: 35px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .sidebar {
+                width: 215px;
+            }
+
+            .main {
+                margin-left: 215px;
+            }
+
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+
+            .app {
+                display: block;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .nav-title,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .nav-item {
+                white-space: nowrap;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px 15px 35px;
+            }
+
+            .admin-profile {
+                display: none;
+            }
+
+            .topbar {
+                margin-bottom: 22px;
+            }
+
+            .page-heading h2 {
+                font-size: 23px;
+            }
+
+            .welcome {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                L
+            </div>
+
+            <div class="brand-text">
+                <h1>LibroTrack</h1>
+                <span>Library Management</span>
+            </div>
+
+        </div>
+
+        <div class="nav-title">
+            Workspace
+        </div>
+
+        <nav class="nav">
+
+            <a href="index.html" class="nav-item active">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a href="books.html" class="nav-item">
+                <span class="nav-icon">▣</span>
+                Books
+            </a>
+
+            <a href="members.html" class="nav-item">
+                <span class="nav-icon">♙</span>
+                Members
+            </a>
+
+            <a href="issues.html" class="nav-item">
+                <span class="nav-icon">↔</span>
+                Issue Records
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System operational
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div class="page-heading">
+
+                <h2>Library Dashboard</h2>
+
+                <p>
+                    A quick overview of your library.
+                </p>
+
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="avatar">
+                    LT
+                </div>
+
+                <div class="profile-text">
+                    <strong>Library Admin</strong>
+                    <span>LibroTrack System</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- WELCOME -->
+        <section class="welcome">
+
+            <div>
+
+                <h3>
+                    Welcome to LibroTrack
+                </h3>
+
+                <p>
+                    Keep track of your books, members and borrowing
+                    activity from one simple library management system.
+                </p>
+
+            </div>
+
+            <div class="welcome-badge">
+                ● Library system active
+            </div>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <div class="section-title">
+
+            <h3>Library Overview</h3>
+
+            <span>Live database summary</span>
+
+        </div>
+
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div>
+
+                    <div class="stat-label">
+                        Total Books
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="totalBooks"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Books registered
+                    </div>
+
+                </div>
+
+                <div class="stat-icon">
+                    📚
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+
+                    <div class="stat-label">
+                        Available Books
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="availableBooks"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Ready to issue
+                    </div>
+
+                </div>
+
+                <div class="stat-icon">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div>
+
+                    <div class="stat-label">
+                        Total Members
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="totalMembers"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-description">
+                        Registered members
+                    </div>
+
+                </div>
+
+                <div class="stat-icon">
+                    ♙
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- LOWER OVERVIEW -->
+        <div class="section-title">
+
+            <h3>Quick Overview</h3>
+
+            <span>Current library status</span>
+
+        </div>
+
+
+        <section class="overview-grid">
+
+
+            <!-- AVAILABILITY -->
+            <div class="panel">
+
+                <h3>
+                    Book Availability
+                </h3>
+
+                <p class="panel-subtitle">
+                    Current availability across your library
+                </p>
+
+
+                <div class="availability-row">
+
+                    <span class="availability-label">
+                        Available
+                    </span>
+
+                    <span
+                            class="availability-value"
+                            id="availableText"
+                    >
+                        0 / 0
+                    </span>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div
+                            class="progress-bar"
+                            id="availabilityBar"
+                    ></div>
+
+                </div>
+
+
+                <div
+                        class="availability-row"
+                        style="margin-top: 20px;"
+                >
+
+                    <span class="availability-label">
+                        Currently Issued
+                    </span>
+
+                    <span
+                            class="availability-value"
+                            id="issuedText"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+            <div class="panel">
+
+                <h3>
+                    Quick Navigation
+                </h3>
+
+                <p class="panel-subtitle">
+                    Go directly to a management section
+                </p>
+
+
+                <div class="quick-actions">
+
+
+                    <a
+                            href="books.html"
+                            class="quick-link"
+                    >
+
+                        <div class="quick-link-left">
+
+                            <div class="quick-icon">
+                                📚
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Manage Books
+                                </strong>
+
+                                <small>
+                                    Add and view books
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                            href="members.html"
+                            class="quick-link"
+                    >
+
+                        <div class="quick-link-left">
+
+                            <div class="quick-icon">
+                                ♙
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Manage Members
+                                </strong>
+
+                                <small>
+                                    Add and view members
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                            href="issues.html"
+                            class="quick-link"
+                    >
+
+                        <div class="quick-link-left">
+
+                            <div class="quick-icon">
+                                ↔
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Issue & Return
+                                </strong>
+
+                                <small>
+                                    Manage borrowing activity
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer class="footer">
+            LibroTrack · Library Book Issue & Return Manager
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    async function loadDashboard() {
+
+        try {
+
+            const booksResponse =
+                await fetch('/books');
+
+            const membersResponse =
+                await fetch('/members');
+
+            const issuesResponse =
+                await fetch('/issues');
+
+
+            if (
+                !booksResponse.ok ||
+                !membersResponse.ok ||
+                !issuesResponse.ok
+            ) {
+                throw new Error(
+                    'Unable to load dashboard data'
+                );
+            }
+
+
+            const books =
+                await booksResponse.json();
+
+            const members =
+                await membersResponse.json();
+
+            const issues =
+                await issuesResponse.json();
+
+
+            const totalBooks =
+                books.length;
+
+
+            const availableBooks =
+                books.filter(
+                    book => book.available
+                ).length;
+
+
+            const issuedBooks =
+                totalBooks - availableBooks;
+
+
+            const totalMembers =
+                members.length;
+
+
+            document.getElementById(
+                'totalBooks'
+            ).textContent =
+                totalBooks;
+
+
+            document.getElementById(
+                'availableBooks'
+            ).textContent =
+                availableBooks;
+
+
+            document.getElementById(
+                'totalMembers'
+            ).textContent =
+                totalMembers;
+
+
+            document.getElementById(
+                'availableText'
+            ).textContent =
+                `${availableBooks} / ${totalBooks}`;
+
+
+            document.getElementById(
+                'issuedText'
+            ).textContent =
+                issuedBooks;
+
+
+            const percentage =
+                totalBooks === 0
+                    ? 0
+                    : (availableBooks / totalBooks) * 100;
+
+
+            document.getElementById(
+                'availabilityBar'
+            ).style.width =
+                `${percentage}%`;
+
+        } catch (error) {
+
+            console.error(
+                'Dashboard loading error:',
+                error
+            );
+
+        }
+
+    }
+
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        loadDashboard
+    );
+
+</script>
+
+</body>
+</html>

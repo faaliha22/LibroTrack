@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Members | LibroTrack</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        .app {
+            min-height: 100vh;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            color: white;
+            position: fixed;
+            inset: 0 auto 0 0;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 10px;
+            margin-bottom: 42px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: white;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-text h1 {
+            font-size: 19px;
+            line-height: 1.1;
+        }
+
+        .brand-text span {
+            display: block;
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .nav-title {
+            color: #6b7280;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            font-weight: 700;
+            padding: 0 12px;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-item {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            transition: 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-item.active {
+            background: white;
+            color: #111827;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid #263244;
+            padding: 18px 10px 4px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 32px 38px 45px;
+        }
+
+        /* =========================
+           TOPBAR
+        ========================= */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .page-heading h2 {
+            font-size: 28px;
+            color: #172033;
+            margin-bottom: 6px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-text strong {
+            display: block;
+            font-size: 13px;
+            color: #172033;
+        }
+
+        .profile-text span {
+            display: block;
+            font-size: 11px;
+            color: #8a93a3;
+            margin-top: 3px;
+        }
+
+        /* =========================
+           CONTENT GRID
+        ========================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(280px, 0.75fr) minmax(450px, 1.25fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e7ebf2;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+        }
+
+        .panel h3 {
+            font-size: 18px;
+            color: #172033;
+            margin-bottom: 6px;
+        }
+
+        .panel-subtitle {
+            color: #7b8494;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 22px;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 7px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d9dee8;
+            border-radius: 9px;
+            background: #fff;
+            color: #172033;
+            font-size: 13px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.06);
+        }
+
+        .form-group input.input-error {
+            border-color: #dc2626;
+        }
+
+        .field-error {
+            color: #dc2626;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-top: 6px;
+            min-height: 0;
+        }
+
+        .add-button {
+            width: 100%;
+            border: none;
+            background: #111827;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            margin-top: 4px;
+        }
+
+        .add-button:hover {
+            background: #1f2937;
+        }
+
+        .message {
+            margin-top: 14px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            color: #15803d;
+        }
+
+        .message.error {
+            color: #dc2626;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .table-header .panel-subtitle {
+            margin-bottom: 18px;
+        }
+
+        .member-count {
+            flex-shrink: 0;
+            background: #f3f4f6;
+            color: #374151;
+            border-radius: 20px;
+            padding: 7px 11px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 520px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 10px;
+            font-size: 13px;
+            color: #374151;
+            border-bottom: 1px solid #eef1f5;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #fafbfc;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: #9ca3af;
+            padding: 28px 10px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 30px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .sidebar {
+                width: 215px;
+            }
+
+            .main {
+                margin-left: 215px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+
+            .app {
+                display: block;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .nav-title,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .nav-item {
+                white-space: nowrap;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px 15px 35px;
+            }
+
+            .admin-profile {
+                display: none;
+            }
+
+            .topbar {
+                margin-bottom: 22px;
+            }
+
+            .page-heading h2 {
+                font-size: 23px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                L
+            </div>
+
+            <div class="brand-text">
+                <h1>LibroTrack</h1>
+                <span>Library Management</span>
+            </div>
+
+        </div>
+
+        <div class="nav-title">
+            Workspace
+        </div>
+
+        <nav class="nav">
+
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a href="books.html" class="nav-item">
+                <span class="nav-icon">▣</span>
+                Books
+            </a>
+
+            <a href="members.html" class="nav-item active">
+                <span class="nav-icon">♙</span>
+                Members
+            </a>
+
+            <a href="issues.html" class="nav-item">
+                <span class="nav-icon">↔</span>
+                Issue Records
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System operational
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="page-heading">
+                <h2>Members</h2>
+                <p>
+                    Manage library members and their contact information.
+                </p>
+            </div>
+
+            <div class="admin-profile">
+
+                <div class="avatar">
+                    LT
+                </div>
+
+                <div class="profile-text">
+                    <strong>Library Admin</strong>
+                    <span>LibroTrack System</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
+
+        <div class="content-grid">
+
+            <!-- ADD MEMBER -->
+
+            <section class="panel">
+
+                <h3>Add New Member</h3>
+
+                <p class="panel-subtitle">
+                    Register a new member in the library.
+                </p>
+
+                <form id="memberForm">
+
+                    <div class="form-group">
+
+                        <label for="memberName">
+                            Member Name
+                        </label>
+
+                        <input
+                                type="text"
+                                id="memberName"
+                                placeholder="Enter member name">
+
+                        <div id="nameError" class="field-error"></div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="memberEmail">
+                            Email
+                        </label>
+
+                        <input
+                                type="email"
+                                id="memberEmail"
+                                placeholder="Enter email address">
+
+                        <div id="emailError" class="field-error"></div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="memberPhone">
+                            Phone Number
+                        </label>
+
+                        <input
+                                type="text"
+                                id="memberPhone"
+                                maxlength="10"
+                                inputmode="numeric"
+                                placeholder="10-digit phone number">
+
+                        <div id="phoneError" class="field-error"></div>
+
+                    </div>
+
+
+                    <button type="submit" class="add-button">
+                        Add Member
+                    </button>
+
+                    <div id="memberMessage" class="message"></div>
+
+                </form>
+
+            </section>
+
+
+            <!-- MEMBERS TABLE -->
+
+            <section class="panel">
+
+                <div class="table-header">
+
+                    <div>
+
+                        <h3>Library Members</h3>
+
+                        <p class="panel-subtitle">
+                            Registered members in LibroTrack.
+                        </p>
+
+                    </div>
+
+                    <span id="memberCount" class="member-count">
+                        0 Members
+                    </span>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="membersTableBody"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <div class="footer">
+            LibroTrack · Library Management System
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const API_BASE = "";
+
+
+    /* =========================
+       ELEMENTS
+    ========================== */
+
+    const memberForm =
+        document.getElementById("memberForm");
+
+    const memberName =
+        document.getElementById("memberName");
+
+    const memberEmail =
+        document.getElementById("memberEmail");
+
+    const memberPhone =
+        document.getElementById("memberPhone");
+
+    const nameError =
+        document.getElementById("nameError");
+
+    const emailError =
+        document.getElementById("emailError");
+
+    const phoneError =
+        document.getElementById("phoneError");
+
+    const memberMessage =
+        document.getElementById("memberMessage");
+
+    const membersTableBody =
+        document.getElementById("membersTableBody");
+
+    const memberCount =
+        document.getElementById("memberCount");
+
+
+    /* =========================
+       ERROR HELPERS
+    ========================== */
+
+    function clearFieldErrors() {
+
+        nameError.textContent = "";
+        emailError.textContent = "";
+        phoneError.textContent = "";
+
+        memberName.classList.remove("input-error");
+        memberEmail.classList.remove("input-error");
+        memberPhone.classList.remove("input-error");
+    }
+
+
+    function showFieldError(input, errorElement, message) {
+
+        input.classList.add("input-error");
+        errorElement.textContent = message;
+    }
+
+
+    function showMessage(message, type) {
+
+        memberMessage.textContent = message;
+
+        memberMessage.className =
+            "message " + type;
+    }
+
+
+    /* =========================
+       BACKEND ERROR
+    ========================== */
+
+    async function getErrorMessage(response) {
+
+        try {
+
+            const data = await response.json();
+
+            if (data.message) {
+                return data.message;
+            }
+
+            return "Something went wrong. Please try again.";
+
+        } catch (error) {
+
+            return "Something went wrong. Please try again.";
+        }
+    }
+
+
+    /* =========================
+       HTML ESCAPE
+    ========================== */
+
+    function escapeHtml(value) {
+
+        if (value === null ||
+            value === undefined) {
+
+            return "";
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    /* =========================
+       LOAD MEMBERS
+    ========================== */
+
+    async function loadMembers() {
+
+        try {
+
+            const response =
+                await fetch("/members");
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load members."
+                );
+            }
+
+            const members =
+                await response.json();
+
+            membersTableBody.innerHTML = "";
+
+            memberCount.textContent =
+                `${members.length} ${
+                    members.length === 1
+                        ? "Member"
+                        : "Members"
+                }`;
+
+
+            if (members.length === 0) {
+
+                membersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4"
+                            class="empty-row">
+                            No members registered yet.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            members.forEach(member => {
+
+                const row =
+                    document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${escapeHtml(member.id)}</td>
+
+                    <td>
+                        ${escapeHtml(member.name)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(member.email)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(member.phone)}
+                    </td>
+                `;
+
+                membersTableBody.appendChild(row);
+            });
+
+
+        } catch (error) {
+
+            membersTableBody.innerHTML = `
+                <tr>
+                    <td colspan="4"
+                        class="empty-row">
+                        Unable to load members.
+                    </td>
+                </tr>
+            `;
+
+            memberCount.textContent =
+                "0 Members";
+        }
+    }
+
+
+    /* =========================
+       FORM SUBMIT
+    ========================== */
+
+    memberForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            clearFieldErrors();
+
+            memberMessage.textContent = "";
+            memberMessage.className = "message";
+
+
+            const name =
+                memberName.value.trim();
+
+            const email =
+                memberEmail.value.trim();
+
+            const phone =
+                memberPhone.value.trim();
+
+
+            /* =========================
+               NAME VALIDATION
+            ========================== */
+
+            if (!name) {
+
+                showFieldError(
+                    memberName,
+                    nameError,
+                    "Please enter the member name."
+                );
+
+                memberName.focus();
+
+                return;
+            }
+
+
+            /* =========================
+               EMAIL VALIDATION
+            ========================== */
+
+            if (!email) {
+
+                showFieldError(
+                    memberEmail,
+                    emailError,
+                    "Please enter the email address."
+                );
+
+                memberEmail.focus();
+
+                return;
+            }
+
+
+            const emailPattern =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+            if (!emailPattern.test(email)) {
+
+                showFieldError(
+                    memberEmail,
+                    emailError,
+                    "Please enter a valid email address."
+                );
+
+                memberEmail.focus();
+
+                return;
+            }
+
+
+            /* =========================
+               PHONE VALIDATION
+            ========================== */
+
+            if (!phone) {
+
+                showFieldError(
+                    memberPhone,
+                    phoneError,
+                    "Please enter the phone number."
+                );
+
+                memberPhone.focus();
+
+                return;
+            }
+
+
+            if (!/^[0-9]{10}$/.test(phone)) {
+
+                showFieldError(
+                    memberPhone,
+                    phoneError,
+                    "Phone number must contain exactly 10 digits."
+                );
+
+                memberPhone.focus();
+
+                return;
+            }
+
+
+            /* =========================
+               ADD MEMBER
+            ========================== */
+
+            try {
+
+                const response =
+                    await fetch("/members", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            name: name,
+                            email: email,
+                            phone: phone
+                        })
+                    });
+
+
+                if (!response.ok) {
+
+                    const errorMessage =
+                        await getErrorMessage(response);
+
+                    showMessage(
+                        errorMessage,
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                await response.json();
+
+
+                showMessage(
+                    "Member added successfully!",
+                    "success"
+                );
+
+
+                memberForm.reset();
+
+                clearFieldErrors();
+
+                await loadMembers();
+
+
+            } catch (error) {
+
+                showMessage(
+                    "Unable to connect to the server. Please try again.",
+                    "error"
+                );
+            }
+
+        }
+    );
+
+
+    /* =========================
+       CLEAR ERROR WHEN TYPING
+    ========================== */
+
+    memberName.addEventListener(
+        "input",
+        function() {
+
+            nameError.textContent = "";
+            memberName.classList.remove("input-error");
+        }
+    );
+
+
+    memberEmail.addEventListener(
+        "input",
+        function() {
+
+            emailError.textContent = "";
+            memberEmail.classList.remove("input-error");
+        }
+    );
+
+
+    memberPhone.addEventListener(
+        "input",
+        function() {
+
+            phoneError.textContent = "";
+            memberPhone.classList.remove("input-error");
+        }
+    );
+
+
+    /* =========================
+       INITIAL LOAD
+    ========================== */
+
+    loadMembers();
+
+</script>
+
+</body>
+</html>
